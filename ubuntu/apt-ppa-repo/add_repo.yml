@@ -1,0 +1,10 @@
+---
+- hosts: ubuntu
+  user: root
+  become: true
+  tasks:
+    - name: Make sure universe repository is enabled
+    apt_repository:
+      repo: deb http://archive.ubuntu.com/ubuntu focal universe
+      state: present
+      update_cache: True
