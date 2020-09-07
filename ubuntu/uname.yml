@@ -1,3 +1,6 @@
-- name: Run uname on all running servers.
-  shell:
-    cmd: uname -a
+---
+- hosts: ubuntu
+  tasks:
+  - name: Run uname on all running servers.
+    shell:
+      cmd: uname -a
