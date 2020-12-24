@@ -8,7 +8,8 @@
 # [user@host ~$] ansible-playbook /etc/ansible/playbooks/webmin.yml --extra-vars 'target=nameFromHostsFile'
 #
 - hosts: '{{ target }}'
-  sudo: yes
+  become: true
+  become_user: root
 
   tasks:
 

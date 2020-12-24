@@ -1,0 +1,168 @@
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+# Ex 1: Ungrouped hosts, specify before any group headers.
+
+## green.example.com
+## blue.example.com
+## 192.168.100.1
+## 192.168.100.10
+
+# Ex 2: A collection of hosts belonging to the 'webservers' group
+
+## [webservers]
+## alpha.example.org
+## beta.example.org
+## 192.168.1.100
+## 192.168.1.110
+
+# If you have multiple hosts following a pattern you can specify
+# them like this:
+
+## www[001:006].example.com
+
+# Ex 3: A collection of database servers in the 'dbservers' group
+
+## [dbservers]
+##
+## db01.intranet.mydomain.net
+## db02.intranet.mydomain.net
+## 10.25.1.56
+## 10.25.1.57
+
+# Here's another example of host ranges, this time there are no
+# leading 0s:
+
+## db-[99:101]-node.example.com
+
+[webservers]
+u-srv.sofia
+infra.sofia
+
+[infra]
+clearos.sofia
+d-infra.sofia
+gitlab.sofia
+infra.sofia
+u-srv.sofia
+
+[dbservers]
+d-mssql.sofia
+apex.sofia
+mysql.sofia
+mssql.sofia
+postresql.sofia
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+## set up ssh user name and path to python3 ##
+[ubuntu:vars]
+ansible_user='georgiem'
+ansible_become=yes
+ansible_become_method=sudo
+ansible_python_interpreter='/usr/bin/env python3'
+
+##########################
+## our aws server names
+## aws-ls-www-1 may be mapped using /etc/hosts or ~/.ssh/config
+## you can use ip address here too
+###########################
+[ubuntu]
+allin.sofia
+apex.sofia
+boinc.sofia
+c650d.sofia
+d-infra.sofia
+d-mssql.sofia
+docker.sofia
+infra.sofia
+gitlab.sofia
+jupyternb.sofia
+k3d.sofia
+mysql.sofia
+mssql.sofia
+postgresql.sofia
+splunk.sofia
+splunk-free.sofia
+u-joomla.sofia
+u-srv.sofia
+ubuntu1604.sofia
+ubuntu1804.sofia
+ubuntu2004.sofia
+
+## set up ssh user name and path to python3 ##
+[ubuntu16:vars]
+ansible_user='georgiem'
+ansible_become=yes
+ansible_become_method=sudo
+ansible_python_interpreter='/usr/bin/env python3'
+
+
+##########################
+## our aws server names
+## aws-ls-www-1 may be mapped using /etc/hosts or ~/.ssh/config
+## you can use ip address here too
+###########################
+[ubuntu16]
+jupyternb.sofia
+mysql.sofia
+mssql.sofia
+postgresql.sofia
+splunk.sofia
+splunk-free.sofia
+u-srv.sofia
+ubuntu1604.sofia
+
+
+## set up ssh user name and path to python3 ##
+[ubuntu18:vars]
+ansible_user='georgiem'
+ansible_become=yes
+ansible_become_method=sudo
+ansible_python_interpreter='/usr/bin/env python3'
+
+
+##########################
+## our aws server names
+## aws-ls-www-1 may be mapped using /etc/hosts or ~/.ssh/config
+## you can use ip address here too
+###########################
+[ubuntu18]
+d-infra.sofia
+d-mssql.sofia
+docker.sofia
+jupyternb.sofia
+mysql.sofia
+mssql.sofia
+postgresql.sofia
+ubuntu1804.sofia
+
+## Ubuntu 20.04 ##
+[ubuntu2004:vars]
+ansible_user='georgiem'
+ansible_become=yes
+ansible_become_method=sudo
+ansible_python_interpreter='/usr/bin/env python3'
+
+[ubuntu2004]
+gitlab.sofia
+ubuntu2004.sofia
+
+## CentOS
+
+[centos:vars]
+ansible_user='georgiem'
+ansible_become=yes
+ansible_become_method=sudo
+##ansible_python_interpreter='/usr/bin/env python3'
+
+[centos]
+centos7.sofia
