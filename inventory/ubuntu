@@ -1,0 +1,41 @@
+# This is the default ansible 'hosts' file.
+#
+# It should live in /etc/ansible/hosts
+#
+#   - Comments begin with the '#' character
+#   - Blank lines are ignored
+#   - Groups of hosts are delimited by [header] elements
+#   - You can enter hostnames or ip addresses
+#   - A hostname/ip can be a member of multiple groups
+
+
+## set up ssh user name and path to python3 ##
+[ubuntu:vars]
+ansible_user='georgiem'
+ansible_become=yes
+ansible_become_method=sudo
+ansible_python_interpreter='/usr/bin/env python3'
+
+###########################
+[ubuntu]
+allin.sofia
+apex.sofia
+boinc.sofia
+c650d.sofia
+d-infra.sofia
+d-mssql.sofia
+docker.sofia
+infra.sofia
+gitlab.sofia
+jupyternb.sofia
+k3d.sofia
+mysql.sofia
+mssql.sofia
+postgresql.sofia
+splunk.sofia
+splunk-free.sofia
+u-joomla.sofia
+u-srv.sofia
+ubuntu1604.sofia
+ubuntu1804.sofia
+ubuntu2004.sofia
