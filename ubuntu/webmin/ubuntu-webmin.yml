@@ -25,12 +25,10 @@
        apt_key: >
         url='http://www.webmin.com/jcameron-key.asc'
         state=present
-     - name: Install Webmin and prerequisites
-       apt: >
+    - name: Install Webmin and prerequisites
+      apt:
         update_cache=yes
-        pkg={{ item }}
-        state=installed
-       with_items:
+        name:
          - perl
          - libnet-ssleay-perl
          - openssl
@@ -40,3 +38,5 @@
          - apt-show-versions
          - python
          - webmin
+        state: present
+        autoclean: yes
