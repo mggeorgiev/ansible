@@ -1,23 +1,16 @@
 ---
 #
-# Ansible playbook: Webmin for Ubuntu v201501302302
+# Ansible playbook: Webmin for Ubuntu v20211051514
 # Martin Georgiev
 # martingeorgiev.com
 #
 # Example Usage:
 # [user@host ~$] ansible-playbook /etc/ansible/playbooks/fail2ban.yml --extra-vars 'target=nameFromHostsFile'
 #
-- hosts: '{{ target }}'
-  sudo: yes
+  - hosts: '{{ target }}'
+    become: true
 
-  tasks:
-
-     - name: Install fail2ban and dependancies
-       apt: >
-        update_cache=yes
-        pkg={{ item }}
-        state=installed
-       with_items:
-         - whois
-         - python3-pyinotify
-         - fail2ban
+    tasks:
+      - name: Install fail2ban and dependancies
+        apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+        loop: [ 'whois' , 'python3-pyinotify', 'fail2ban' ]
