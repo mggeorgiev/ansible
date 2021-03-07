@@ -7,7 +7,7 @@
 # Example Usage:
 # [user@host ~$] ansible-playbook /etc/ansible/playbooks/fail2ban.yml --extra-vars 'target=nameFromHostsFile'
 #
-  - hosts: '{{ target }}'
+  - hosts: docker #'{{ target }}'
     become: true
 
     tasks:
