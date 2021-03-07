@@ -1,0 +1,31 @@
+---
+#
+# Ansible playbook: Expose docker api v20210307
+# Martin Georgiev
+# martingeorgiev.com
+#
+# Example Usage:
+# [user@host ~$] ansible-playbook /etc/ansible/playbooks/fail2ban.yml --extra-vars 'target=nameFromHostsFile'
+#
+  - hosts: '{{ target }}'
+    become: true
+
+    tasks:
+        # NOTE: Before 2.3, option 'dest', 'destfile' or 'name' was used instead of 'path'
+      - name: Comment out the default value
+        ansible.builtin.lineinfile:
+          path: /lib/systemd/system/docker.service
+          regexp: '^ExecStart='
+          line: '#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock'
+  
+      - name: Add the required text
+        ansible.builtin.lineinfile:
+          path: /lib/systemd/system/docker.service
+          insertafter: '^#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock'
+          line: 'ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 --containerd=/run/containerd/containerd.sock'
+
+      - name: Add the required text
+        ansible.builtin.lineinfile:
+          path: /lib/systemd/system/docker.service
+          insertafter: '^#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock'
+          line: '^ExecStart='
