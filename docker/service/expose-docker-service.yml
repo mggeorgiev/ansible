@@ -15,17 +15,33 @@
       - name: Comment out the default value
         ansible.builtin.lineinfile:
           path: /lib/systemd/system/docker.service
-          regexp: '^ExecStart='
+          regexp: '^ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock'
           line: '#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock'
   
-      - name: Add the required text
+      - name: Add the required value
         ansible.builtin.lineinfile:
           path: /lib/systemd/system/docker.service
           insertafter: '^#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock'
           line: 'ExecStart=/usr/bin/dockerd -H fd:// -H tcp://0.0.0.0:2375 --containerd=/run/containerd/containerd.sock'
 
-      - name: Add the required text
+      - name: Add the required reload
         ansible.builtin.lineinfile:
           path: /lib/systemd/system/docker.service
           insertafter: '^#ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock'
-          line: '^ExecStart='
+          line: 'ExecStart='
+      
+      - name: Make sure a service is running
+        ansible.builtin.systemd:
+          state: started
+          name: docker.service
+      
+      - name: Restart service docker.service, also issue daemon-reload to pick up config changes
+        ansible.builtin.systemd:
+          state: restarted
+          daemon_reload: yes
+          name: docker.service
+      
+      - name: Make sure a service is running
+        ansible.builtin.systemd:
+          state: started
+          name: docker.service
