@@ -1,9 +1,9 @@
 
-sudo apt-get update && sudo apt-get install telegraf
-sudo service telegraf start
+# sudo apt-get update && sudo apt-get install telegraf
+# sudo service telegraf start
 
-sudo service telegraf status
-telegraf -config /etc/telegraf/telegraf.conf -test
+# sudo service telegraf status
+# telegraf -config /etc/telegraf/telegraf.conf -test
 ---
 - hosts: telegraf
   become: true
