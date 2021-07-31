@@ -1,5 +1,3 @@
-
-# sudo apt-get update && sudo apt-get install telegraf
 # sudo service telegraf start
 
 # sudo service telegraf status
@@ -10,12 +8,23 @@
   become_user: root
   tasks:
     - name: Add the repository key
-      ansible.builtin.shell: wget -qO- https://repos.influxdata.com/influxdb.key | sudo apt-key add -   
+      shell: "wget -qO- https://repos.influxdata.com/influxdb.key | sudo apt-key add -"
 
     - name: Add the repository source
       ansible.builtin.shell: source /etc/lsb-release
+
     - name: Add the repository source
       ansible.builtin.shell: echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list   
     
     - name: Upgrade all packages on servers
       apt: upgrade=dist force_apt_get=yes
+    
+    - name: Install apache telegraf  (state=present is optional)
+      apt:
+        name: telegraf
+        state: present
+    
+    - name: Start service telegraf, if not started
+      ansible.builtin.service:
+        name: telegraf
+        state: started
