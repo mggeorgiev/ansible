@@ -60,6 +60,12 @@ mysql.sofia
 mssql.sofia
 postresql.sofia
 
+[telegraf]
+pi8gb.habay
+hypervisor.sofia
+u-srv.sofia
+d-infra.sofia
+
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
 

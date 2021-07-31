@@ -1,0 +1,21 @@
+
+sudo apt-get update && sudo apt-get install telegraf
+sudo service telegraf start
+
+sudo service telegraf status
+telegraf -config /etc/telegraf/telegraf.conf -test
+---
+- hosts: telegraf
+  become: true
+  become_user: root
+  tasks:
+    - name: Add the repository key
+      ansible.builtin.shell: wget -qO- https://repos.influxdata.com/influxdb.key | sudo apt-key add -   
+
+    - name: Add the repository source
+      ansible.builtin.shell: source /etc/lsb-release
+    - name: Add the repository source
+      ansible.builtin.shell: echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list   
+    
+    - name: Upgrade all packages on servers
+      apt: upgrade=dist force_apt_get=yes
