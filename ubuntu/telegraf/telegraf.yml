@@ -35,10 +35,10 @@
         state: started
 
     - name: Comment out the default value
-      ansible.builtin.replace:
+      ansible.builtin.lineinfile:
         path: /etc/telegraf/telegraf.conf
-        regexp: '^http://127.0.0.1:8086'
-        replace: 'http://d-infra.sofia:8086'
+        regexp: '^# urls = ["http://127.0.0.1:8086"]'
+        line: '   urls = ["http://d-infra.sofia:8086"]'
   
     - name: Comment out the default value
       ansible.builtin.lineinfile:
