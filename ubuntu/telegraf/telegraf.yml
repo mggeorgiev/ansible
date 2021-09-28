@@ -34,7 +34,6 @@
         name: telegraf
         state: started
 
-
     - name: Comment out the default value
       ansible.builtin.lineinfile:
         path: /etc/telegraf/telegraf.conf
@@ -49,6 +48,11 @@
 
     - name: Start service telegraf, if not started
       ansible.builtin.service:
-        name: restarted
+        name: telegraf
         daemon_reload: yes
+        state: restarted
+
+    - name: Start service telegraf, if not started
+      ansible.builtin.service:
+        name: telegraf
         state: started
