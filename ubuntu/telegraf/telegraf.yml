@@ -4,26 +4,54 @@
 # telegraf -config /etc/telegraf/telegraf.conf -test
 ---
 - hosts: telegraf
+  gather_facts: True
   become: true
   become_user: root
   tasks:
-    - name: Add the repository key
-      shell: "wget -qO- https://repos.influxdata.com/influxdb.key | sudo apt-key add -"
+    - name: Telegraf repository key
+      apt_key:
+        url: https://repos.influxdata.com/influxdb.key
+        keyring: /etc/apt/trusted.gpg.d/telegraf.gpg
+        state: present
 
-    - name: Add the repository source
-      shell: source /etc/lsb-release
-
-    - name: Add the repository source
-      shell: echo "deb https://repos.influxdata.com/${DISTRIB_ID,,} ${DISTRIB_CODENAME} stable" | sudo tee /etc/apt/sources.list.d/influxdb.list   
+    - name: Telegraf repository
+      apt_repository:
+        repo: "deb https://repos.influxdata.com/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+        filename: telegraf
+      register: repo_telegraf 
     
     - name: Upgrade all packages on servers
       apt: upgrade=dist force_apt_get=yes
     
-    - name: Install apache telegraf  (state=present is optional)
+    - name: Install telegraf  (state=present is optional)
       apt:
         name: telegraf
         state: present
     
+    - name: Start service telegraf, if not started
+      ansible.builtin.service:
+        name: telegraf
+        state: started
+
+    - name: Comment out the default value
+      ansible.builtin.replace:
+        path: /etc/telegraf/telegraf.conf
+        regexp: '^http://127.0.0.1:8086'
+        replace: 'http://d-infra.sofia:8086'
+  
+    - name: Comment out the default value
+      ansible.builtin.lineinfile:
+        path: /etc/telegraf/telegraf.conf
+        regexp: '^  hostname = ""'
+        line: '  hostname = "{{ansible_hostname}}.sofia"'
+
+    - name: Start service telegraf, if not started
+      ansible.builtin.service:
+        name: telegraf
+        daemon_reload: yes
+        state: restarted
+
     - name: Start service telegraf, if not started
       ansible.builtin.service:
         name: telegraf
