@@ -1,0 +1,40 @@
+# https://www.redhat.com/sysadmin/ansible-create-users-csv
+---
+- hosts: users
+  tasks:
+- name: create users from csv file
+  hosts: all
+  tasks:
+   - name: reading the csv file
+     read_csv:
+      path: username.csv
+     register: user_list
+     delegate_to: localhost
+
+   - name: display user_list data
+     debug:
+      var: user_list.list
+
+   - name: extract Username from all dictionaries
+     debug:
+      msg: "{{ item.Username }}"
+      loop: "{{ user_list.list }}"
+
+   - name: create users from the csv
+     user:
+        name: "{{ item.Username }}"
+        uid: "{{ item.UID }}"
+        groups: "{{ item.Groups }}"
+        append: true
+        password: "{{ item.Password | password_hash('sha512') }}"
+        comment: "{{ item.First_Name }} {{ item.Last_Name }}"
+        state: present
+     loop: "{{ user_list.list }}"
+     become: true
+
+  # - name: Add the user 'georgiem' with a bash shell, appending the group 'sudo' to the user's groups
+  #   ansible.builtin.user:
+  #     name: georgiem
+  #     shell: /bin/bash
+  #     groups: sudo,docker
+  #     append: yes
