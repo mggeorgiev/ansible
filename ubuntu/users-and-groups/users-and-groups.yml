@@ -2,7 +2,7 @@
 ---
 - hosts: users
   tasks:
-  
+
   vars_prompt:
   - name: "user_password"    
     prompt: "Enter a password for the georgiem"    
@@ -18,9 +18,7 @@
       state: present
       groups: "wheel"
       update_password: on_create
-    loop:
-      - georgiem
-      - ansible
+    loop: [ 'georgiem' , 'ansible' ]
 
   # - name: Creating user "{{ uusername }}" with admin access
   #   user: 
