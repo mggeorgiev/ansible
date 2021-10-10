@@ -10,11 +10,11 @@
         name: '*'
         state: latest
 
-    # - name: Add ansible group
-    #   group:
-    #     name: "{{ item }}"
-    #     state: present
-    #   with_items: "{{ users }}"
+    - name: Add ansible group
+      group:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ users }}"
 
     - name: Add local user
       user:
