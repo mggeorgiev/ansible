@@ -21,7 +21,7 @@
         name: "{{ users }}"
         group: "{{ users }}"
         shell: /bin/bash
-        home: /home/"{{ item }}"
+        home: "/home/{{ item }}"
         create_home: yes
         state: present
       with_items: "{{ users }}"
