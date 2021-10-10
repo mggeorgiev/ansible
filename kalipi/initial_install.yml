@@ -15,7 +15,7 @@
         name: '*'
         state: latest
 
-    - name: Add ansible group
+    - name: Add user groups
       group:
         name: "{{ item }}"
         state: present
@@ -37,6 +37,18 @@
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
         state: present
       with_items: "{{ users }}"
+
+    - name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+      openssh_keypair:
+        path: /home/kali/.ssh/id_rsa
+        owner: kali
+        group: kali
+
+    - name: Fix owner of the generated pub key
+      file:
+        path: /home/kali/.ssh/id_rsa.pub
+        owner: kali
+        group: kali
 
     # - name: Add sudoer rule for local user
     #   copy:
