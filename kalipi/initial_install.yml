@@ -53,13 +53,13 @@
         name: wheel
         state: present
 
-    - name: Allow 'wheel' group to have passwordless sudo
-      lineinfile:
-        dest: /etc/sudoers
-        state: present
-        regexp: '^%wheel'
-        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
-        validate: 'visudo -cf %s'
+    # - name: Allow 'wheel' group to have passwordless sudo
+    #   lineinfile:
+    #     dest: /etc/sudoers
+    #     state: present
+    #     regexp: '^%wheel'
+    #     line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    #     validate: 'visudo -cf %s'
 
     - name: Add sudoers users to wheel group
       user:
@@ -69,10 +69,10 @@
         state=present
       with_items: "{{ users }}"
 
-- name: Set up authorized keys for the deployer user
-  authorized_key: user=deployer key="{{item}}"
-  with_file:
-    - /home/railsdev/.ssh/id_rsa.pub
+    # - name: Set up authorized keys for the deployer user
+    #   authorized_key: user=deployer key="{{item}}"
+    #   with_file:
+    #     - /home/railsdev/.ssh/id_rsa.pub
 
     - name: Add hardened SSH config
       copy:
