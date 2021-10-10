@@ -48,10 +48,10 @@
     #     validate: /usr/sbin/visudo -csf %s
     #   with_items: "{{ users }}"
 
-    - name: Make sure we have a 'wheel' group
-      group:
-        name: wheel
-        state: present
+    # - name: Make sure we have a 'wheel' group
+    #   group:
+    #     name: wheel
+    #     state: present
 
     # - name: Allow 'wheel' group to have passwordless sudo
     #   lineinfile:
@@ -64,7 +64,7 @@
     - name: Add sudoers users to wheel group
       user:
         name={{ item }}
-        groups=wheel
+        groups=sudo
         append=yes
         state=present
       with_items: "{{ users }}"
