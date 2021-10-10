@@ -3,9 +3,12 @@
 - hosts: users
   tasks:
 
+  vars:
+    users:
+    - ansible
   vars_prompt:
   - name: "user_password"    
-    prompt: "Enter a password for the georgiem"    
+    prompt: "Enter a password for the user"
     private: yes    
     encrypt: "md5_crypt" #need to have python-passlib installed in local machine before we can use it    
     confirm: yes    
@@ -13,12 +16,12 @@
 
   - name: Add several users
     ansible.builtin.user:
-      name: "{{ item }}"
+      name: "{{item}}"
       password: "{{user_password}}"
       state: present
       groups: "wheel"
       update_password: on_create
-    loop: [ 'georgiem' , 'ansible' ]
+    with_items: "{{ users }}"
 
   # - name: Creating user "{{ uusername }}" with admin access
   #   user: 
