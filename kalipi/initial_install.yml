@@ -49,8 +49,8 @@
 
     - name: Add sudoer rule for local user
       copy:
-        dest: /etc/sudoers.d/"{{ item }}"
-        src: etc/sudoers.d/"{{ item }}"
+        dest: "/etc/sudoers.d/{{ item }}"
+        src: "etc/sudoers.d/{{ item }}"
         owner: root
         group: root
         mode: 0440
