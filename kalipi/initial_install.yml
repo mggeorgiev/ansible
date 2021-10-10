@@ -18,25 +18,25 @@
 
     - name: Add local user
       user:
-        name: {{ item }}
-        group: {{ item }}
+        name: "{{ users }}"
+        group: "{{ users }}"
         shell: /bin/bash
-        home: /home/{{ item }}
+        home: /home/"{{ item }}"
         create_home: yes
         state: present
       with_items: "{{ users }}"
 
     - name: Add SSH public key for user
       authorized_key:
-        user: {{ item }}
+        user: "{{ users }}"
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
         state: present
       with_items: "{{ users }}"
 
     - name: Add sudoer rule for local user
       copy:
-        dest: /etc/sudoers.d/{{ item }}
-        src: etc/sudoers.d/{{ item }}
+        dest: /etc/sudoers.d/"{{ item }}"
+        src: etc/sudoers.d/"{{ item }}"
         owner: root
         group: root
         mode: 0440
