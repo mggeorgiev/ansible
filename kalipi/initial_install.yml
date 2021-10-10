@@ -38,15 +38,41 @@
         state: present
       with_items: "{{ users }}"
 
-    - name: Add sudoer rule for local user
-      copy:
-        dest: "/etc/sudoers.d/{{ item }}"
-        src: "etc/sudoers.d/{{ item }}"
-        owner: root
-        group: root
-        mode: 0440
-        validate: /usr/sbin/visudo -csf %s
+    # - name: Add sudoer rule for local user
+    #   copy:
+    #     dest: "/etc/sudoers.d/{{ item }}"
+    #     src: "etc/sudoers.d/{{ item }}"
+    #     owner: root
+    #     group: root
+    #     mode: 0440
+    #     validate: /usr/sbin/visudo -csf %s
+    #   with_items: "{{ users }}"
+
+    - name: Make sure we have a 'wheel' group
+      group:
+        name: wheel
+        state: present
+
+    - name: Allow 'wheel' group to have passwordless sudo
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+
+    - name: Add sudoers users to wheel group
+      user:
+        name={{ item }}
+        groups=wheel
+        append=yes
+        state=present
       with_items: "{{ users }}"
+
+- name: Set up authorized keys for the deployer user
+  authorized_key: user=deployer key="{{item}}"
+  with_file:
+    - /home/railsdev/.ssh/id_rsa.pub
 
     - name: Add hardened SSH config
       copy:
