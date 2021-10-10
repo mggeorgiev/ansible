@@ -7,7 +7,7 @@
   tasks:
     - name: Print the users
       ansible.builtin.debug:
-        msg: The folloing users will be created {{ item }}
+        msg: "The folloing users will be created: {{ item }}"
       with_items: "{{ users }}"
 
     - name: Perform full patching
@@ -20,15 +20,6 @@
         name: "{{ item }}"
         state: present
       with_items: "{{ users }}"
-
-    # - name: Add local user
-    #   user:
-    #     name: ansible
-    #     group: ansible
-    #     shell: /bin/bash
-    #     home: /home/ansible
-    #     create_home: yes
-    #     state: present
 
     - name: Add local user
       user:
