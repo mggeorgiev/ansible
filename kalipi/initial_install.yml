@@ -17,32 +17,32 @@
 
     - name: Add ansible group
       group:
-        name: "{{ item }}"
+        name: "{{ item.value |string }}"
         state: present
       with_items: "{{ users }}"
 
-    - name: Add local user
-      user:
-        name: ansible
-        group: ansible
-        shell: /bin/bash
-        home: /home/ansible
-        create_home: yes
-        state: present
+    # - name: Add local user
+    #   user:
+    #     name: ansible
+    #     group: ansible
+    #     shell: /bin/bash
+    #     home: /home/ansible
+    #     create_home: yes
+    #     state: present
 
     - name: Add local user
       user:
-        name: "{{ users }}"
-        group: "{{ users }}"
+        name: "{{ item.value |string }}"
+        group: "{{ item.value |string }}"
         shell: /bin/bash
-        home: "/home/{{ item }}"
+        home: "/home/{{ item.value |string }}"
         create_home: yes
         state: present
       with_items: "{{ users }}"
 
     - name: Add SSH public key for user
       authorized_key:
-        user: "{{ users }}"
+        user: "{{ item.value |string }}"
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
         state: present
       with_items: "{{ users }}"
