@@ -8,9 +8,9 @@
   - name: "kali_user_password"    
     prompt: "Enter a new password for the kali user"
     private: yes    
-    encrypt: "md5_crypt" #need to have python-passlib installed in local machine before we can use it    
+    #encrypt: "md5_crypt" #need to have python-passlib installed in local machine before we can use it    
     confirm: yes    
-    salt_size: 7
+    #salt_size: 7
 
   tasks:
     - name: Print the users
@@ -62,8 +62,8 @@
       user:
         name: admin
         update_password: always
-        password: "{{ kali_user_password }}"
-        #password: "{{ newpassword|password_hash('sha512') }}"
+        password: "{{ kali_user_password|password_hash('sha512') }}"
+        #password: "{{ kali_user_password }}"
 
     # - name: Add sudoer rule for local user
     #   copy:
