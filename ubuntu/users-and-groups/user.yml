@@ -1,0 +1,48 @@
+# https://www.redhat.com/sysadmin/ansible-create-users-csv
+---
+- hosts: users
+  tasks:
+
+  vars_prompt:
+  - name: "user_name"    
+    prompt: "Enter a username"
+
+  - name: "user_password"    
+    prompt: "Enter a new password for the "
+    private: yes    
+    confirm: yes
+  - name: "user_name"
+    prompt: "Enter a username"
+
+  - name: Add user user group
+    group:
+      name: "{{ user_name }} "
+      state: present
+
+  - name: Add the user
+    user:
+      name: "{{ user_name }} "
+      group: "{{ user_name }} "
+      shell: /bin/bash
+      home: "/home/"{{ user_name }} ""
+      create_home: yes
+      state: present
+
+  - name: Add SSH public key for the user
+    authorized_key:
+      user: "{{ user_name }} "
+      key: "{{ lookup('file', '/home/{{ user_name }}/.ssh/id_rsa.pub') }}"
+      state: present
+
+  - name: Change the user password
+    user:
+      name: "{{ user_name }} "
+      update_password: always
+      password: "{{ user_password|password_hash('sha512') }}"
+
+  - name: Add sudoers users to wheel group
+    user:
+      name="{{ user_name }} "
+      groups=sudo
+      append=yes
+      state=present

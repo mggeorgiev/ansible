@@ -1,0 +1,46 @@
+- hosts: users
+  tasks:
+
+  vars_prompt:
+  - name: "ansible_user_password"    
+    prompt: "Enter a new password for the ansible user"
+    private: yes    
+    confirm: yes    
+
+  - name: "georgiem_user_password"    
+    prompt: "Enter a new password for the georgiem user"
+    private: yes    
+    confirm: yes    
+
+  - name: Add ansible user group
+    group:
+      name: ansible
+      state: present
+
+  - name: Add ansible user
+    user:
+      name: ansible
+      group: ansible
+      shell: /bin/bash
+      home: "/home/ansible"
+      create_home: yes
+      state: present
+
+  - name: Add SSH public key for user ansible
+    authorized_key:
+      user: ansible
+      key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+      state: present
+
+  - name: Change ansible user password
+    user:
+      name: ansible
+      update_password: always
+      password: "{{ ansible_user_password|password_hash('sha512') }}"
+
+  - name: Add sudoers users to wheel group
+    user:
+      name=ansible
+      groups=sudo
+      append=yes
+      state=present

@@ -31,10 +31,3 @@
         state: present
      loop: "{{ user_list.list }}"
      become: true
-
-  # - name: Add the user 'georgiem' with a bash shell, appending the group 'sudo' to the user's groups
-  #   ansible.builtin.user:
-  #     name: georgiem
-  #     shell: /bin/bash
-  #     groups: sudo,docker
-  #     append: yes
