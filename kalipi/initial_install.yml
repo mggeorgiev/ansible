@@ -81,6 +81,10 @@
       apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
       loop: [ 'whois', 'python3-pyinotify', 'fail2ban' ]
 
+    - name: Install X2Go and dependancies
+      apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+      loop: [ 'x2goserver', 'x2goclient' ]
+
   handlers:
     - name: Reload SSH
       service:
