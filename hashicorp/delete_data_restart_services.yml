@@ -14,8 +14,15 @@
           state: stopped
           name: nomad.service
 
-      - name: Execute the command in remote shell; delete the data folders
+      - name: Execute the command in remote shell; delete the consul data folders
+        ansible.builtin.shell: sudo rm - R /opt/consul/data
+        args:
+          executable: /bin/bash
+
+      - name: Execute the command in remote shell; delete the nomad data folders
         ansible.builtin.shell: sudo rm - R /opt/nomad/data
+        args:
+          executable: /bin/bash
       
       - name: Restart service consul.service, also issue daemon-reload to pick up config changes
         ansible.builtin.systemd:
