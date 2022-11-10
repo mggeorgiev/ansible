@@ -1,0 +1,40 @@
+  - hosts: hashicorp #'{{ target }}'
+    become: true
+
+    tasks:
+        # NOTE: Before 2.3, option 'dest', 'destfile' or 'name' was used instead of 'path'
+
+      - name: Make sure the consul.service service is NOT running
+        ansible.builtin.systemd:
+          state: stopped
+          name: consul.service
+
+      - name: Make sure the nomad.service service is NOT running
+        ansible.builtin.systemd:
+          state: stopped
+          name: nomad.service
+
+      - name: Execute the command in remote shell; delete the data folders
+        ansible.builtin.shell: sudo rm - R /opt/nomad/data
+      
+      - name: Restart service consul.service, also issue daemon-reload to pick up config changes
+        ansible.builtin.systemd:
+          state: restarted
+          daemon_reload: yes
+          name: consul.service
+      
+      - name: Make sure the consul.service service is running
+        ansible.builtin.systemd:
+          state: started
+          name: consul.service
+      
+      - name: Restart service nomad.service, also issue daemon-reload to pick up config changes
+        ansible.builtin.systemd:
+          state: restarted
+          daemon_reload: yes
+          name: nomad.service
+      
+      - name: Make sure the nomad.service service is running
+        ansible.builtin.systemd:
+          state: started
+          name: nomad.service
