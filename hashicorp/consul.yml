@@ -1,0 +1,53 @@
+# Source: https://dev.to/admantium/infrastructure-home-using-ansible-to-install-the-service-monitoring-software-consul-14kb
+---
+- hosts: consul
+  become: true
+  become_user: root
+  tasks:
+    - name: Set vars when architecture is armv7l
+      set_fact:
+        consul_src_file: "consul_{{ consul_version }}_linux_armhfv6.zip"
+        consul_src_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_armhfv6.zip"
+        consul_src_hash: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_SHA256SUMS"
+      when: ansible_facts.architecture == 'armv7l'
+    
+    - name: Create consul group
+      group:
+        name: consul
+        state: present
+        system: true
+
+    - name: Create consul user
+      user:
+        name: consul
+        group: consul
+        shell: /bin/false
+        home: /etc/consul/
+        state: present
+
+    - name: Create consul dir
+      file:
+        state: directory
+        path: "{{ consul_base_directory }}"
+        owner: consul
+        mode: 0755
+
+    - name: Get consul binary
+      get_url:
+        url: "{{ hostvars[inventory_hostname].consul_src_url }}"
+        dest: /tmp
+        checksum: sha256:{{ hostvars[inventory_hostname].consul_src_hash }}
+
+    - name: Unzip consul binary
+      unarchive:
+        src: /tmp/{{ hostvars[inventory_hostname].consul_src_file }}
+        dest: "{{ consul_base_directory }}"
+        remote_src: true
+        mode: 0744
+
+    - name: Create symlink
+      file:
+        src: "{{ consul_base_directory }}/consul"
+        dest: /usr/local/bin/consul
+        state: link
+

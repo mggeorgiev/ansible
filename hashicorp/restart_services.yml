@@ -1,0 +1,38 @@
+  - hosts: hashicorp #'{{ target }}'
+    become: true
+
+    tasks:
+        # NOTE: Before 2.3, option 'dest', 'destfile' or 'name' was used instead of 'path'
+
+      
+      - name: Make sure a service is running
+        ansible.builtin.systemd:
+          state: started
+          name: consul.service
+      
+      - name: Restart service docker.service, also issue daemon-reload to pick up config changes
+        ansible.builtin.systemd:
+          state: restarted
+          daemon_reload: yes
+          name: consul.service
+      
+      - name: Make sure a service is running
+        ansible.builtin.systemd:
+          state: started
+          name: consul.service
+      
+      - name: Make sure a service is running
+        ansible.builtin.systemd:
+          state: started
+          name: nomad.service
+      
+      - name: Restart service docker.service, also issue daemon-reload to pick up config changes
+        ansible.builtin.systemd:
+          state: restarted
+          daemon_reload: yes
+          name: nomad.service
+      
+      - name: Make sure a service is running
+        ansible.builtin.systemd:
+          state: started
+          name: nomad.service
