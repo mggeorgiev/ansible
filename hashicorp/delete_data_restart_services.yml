@@ -24,24 +24,24 @@
         args:
           executable: /bin/bash
       
-      - name: Restart service consul.service, also issue daemon-reload to pick up config changes
-        ansible.builtin.systemd:
-          state: restarted
-          daemon_reload: yes
-          name: consul.service
+      # - name: Restart service consul.service, also issue daemon-reload to pick up config changes
+      #   ansible.builtin.systemd:
+      #     state: restarted
+      #     daemon_reload: yes
+      #     name: consul.service
       
-      - name: Make sure the consul.service service is running
-        ansible.builtin.systemd:
-          state: started
-          name: consul.service
+      # - name: Make sure the consul.service service is running
+      #   ansible.builtin.systemd:
+      #     state: started
+      #     name: consul.service
       
-      - name: Restart service nomad.service, also issue daemon-reload to pick up config changes
-        ansible.builtin.systemd:
-          state: restarted
-          daemon_reload: yes
-          name: nomad.service
+      # - name: Restart service nomad.service, also issue daemon-reload to pick up config changes
+      #   ansible.builtin.systemd:
+      #     state: restarted
+      #     daemon_reload: yes
+      #     name: nomad.service
       
-      - name: Make sure the nomad.service service is running
-        ansible.builtin.systemd:
-          state: started
-          name: nomad.service
+      # - name: Make sure the nomad.service service is running
+      #   ansible.builtin.systemd:
+      #     state: started
+      #     name: nomad.service
