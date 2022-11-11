@@ -15,14 +15,16 @@
           name: nomad.service
 
       - name: Execute the command in remote shell; delete the consul data folders
-        shell: sudo rm -R /opt/consul/data
+        shell: rm -R /opt/consul/data
         args:
           executable: /bin/bash
+        become: yes
 
       - name: Execute the command in remote shell; delete the nomad data folders
-        shell: sudo rm -R /opt/nomad/data
+        shell: rm -R /opt/nomad/data
         args:
           executable: /bin/bash
+        become: yes
       
       # - name: Restart service consul.service, also issue daemon-reload to pick up config changes
       #   ansible.builtin.systemd:
