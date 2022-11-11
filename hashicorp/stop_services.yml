@@ -1,0 +1,15 @@
+  - hosts: hashicorp #'{{ target }}'
+    become: true
+
+    tasks:
+        # NOTE: Before 2.3, option 'dest', 'destfile' or 'name' was used instead of 'path'
+
+      - name: Make sure the consul.service service is NOT running
+        ansible.builtin.systemd:
+          state: stopped
+          name: consul.service
+
+      - name: Make sure the nomad.service service is NOT running
+        ansible.builtin.systemd:
+          state: stopped
+          name: nomad.service
