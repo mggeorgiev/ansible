@@ -1,0 +1,24 @@
+---
+- hosts: ubuntu
+  become: true
+  become_user: root
+  tasks:
+    - name: Make sure a service is running
+      ansible.builtin.systemd:
+        state: started
+        name: systemd-resolved.service
+    
+    - name: Restart service docker.service, also issue daemon-reload to pick up config changes
+      ansible.builtin.systemd:
+        state: restarted
+        daemon_reload: yes
+        name: systemd-resolved.service.service
+    
+    - name: Make sure a service is running
+      ansible.builtin.systemd:
+        state: started
+        name: systemd-resolved.service.service
+
+    # - name: Restart systemd-resolved on all running servers.
+    #   shell:
+    #     cmd: sudo systemctl restart systemd-resolved
