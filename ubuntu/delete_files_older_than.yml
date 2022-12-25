@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - name: find all files that are older than 365 days
+      find:
+        paths: /var/lib/docker/volumes/mssqlsystem/_data/data/covid19/
+        age: 365d
+        recurse: yes
+      register: filesOlderThan
+    - name: remove older than 365
+      file:
+        path: "{{ item.path }}" 
+        state: absent
+      with_items: "{{ filesOlderThan.files }}"
