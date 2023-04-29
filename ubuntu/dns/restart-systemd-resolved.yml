@@ -12,12 +12,12 @@
       ansible.builtin.systemd:
         state: restarted
         daemon_reload: yes
-        name: systemd-resolved.service.service
+        name: systemd-resolved.service
     
     - name: Make sure a service is running
       ansible.builtin.systemd:
         state: started
-        name: systemd-resolved.service.service
+        name: systemd-resolved.service
 
     # - name: Restart systemd-resolved on all running servers.
     #   shell:
