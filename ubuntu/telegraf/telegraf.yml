@@ -2,6 +2,8 @@
 
 # sudo service telegraf status
 # telegraf -config /etc/telegraf/telegraf.conf -test
+
+#run playbook ansible-playbook ~/ansible/ubuntu/telegraf/telegraf.yml --inventory-file ~/inventory -K
 ---
 - hosts: telegraf
   gather_facts: True
