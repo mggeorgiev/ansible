@@ -5,7 +5,7 @@
 # martingeorgiev.com
 #
 # Example Usage:
-# [user@host ~$] ansible-playbook /etc/ansible/playbooks/fail2ban.yml --extra-vars 'target=nameFromHostsFile'
+# [user@host ~$] ansible-playbook ansible/ubuntu/fail2ban/ubuntu-fail2ban.yml --extra-vars 'target=nameFromHostsFile' -K
 #
   - hosts: '{{ target }}'
     become: true
