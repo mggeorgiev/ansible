@@ -5,14 +5,24 @@
 # martingeorgiev.com
 #
 # Example Usage:
-# [user@host ~$] ansible-playbook /etc/ansible/playbooks/fail2ban.yml --extra-vars 'target=nameFromHostsFile'
+# [user@host ~$] ansible-playbook ~/ansible/docker/install.yml --extra-vars 'target=nameFromHostsFile'
 #
   - hosts: '{{ target }}'
     become: true
 
     tasks:
-      - name: Install aptitude using apt
-        apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+      # - name: Install aptitude using apt
+      #   apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+      
+      - name: Remove old docker packages
+        apt:
+          pkg: tig
+          state: absent
+        become: true
+      
+      - name: Install docker and dependancies
+        apt: name={{ item }} state=absent
+        loop: [ 'docker.io' , 'docker-doc', 'docker-compose', 'podman-docker', 'containerd', 'runc' ]
 
       - name: Add Docker GPG apt Key
         apt_key:
@@ -21,11 +31,7 @@
 
       - name: Install docker and dependancies
         apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
-        loop: [ 'whois' , 'python3-pyinotify', 'fail2ban' ]
-
-      - name: Install required system packages
-        apt: name={{ item }} state=latest update_cache=yes
-        loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+        loop: [ 'ca-certificates' , 'curl', 'gnupg' ]
 
       - name: Add Docker Repository
         apt_repository:
@@ -35,9 +41,9 @@
       - name: Update apt and install docker-ce
         apt: update_cache=yes name=docker-ce state=latest
 
-      - name: Install Docker Module for Python
-        pip:
-          name: docker
+      # - name: Install Docker Module for Python
+      #   pip:
+      #     name: docker
 
       # - name: Pull default Docker image
       #   docker_image:
