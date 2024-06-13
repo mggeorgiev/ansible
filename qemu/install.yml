@@ -1,0 +1,38 @@
+---
+#
+# Ansible playbook: qemu guest agent install for Ubuntu v20240613
+# Martin Georgiev
+# martingeorgiev.com
+#
+# Example Usage:
+# [user@host ~$] ansible-playbook ~/ansible/qemu/install.yml --inventory-file ~/inventory --extra-vars 'target=pi.habay' -K
+#
+  - hosts: '{{ target }}'
+    become: true
+
+    tasks:   
+      - name: Update apt and install qemu-guest-agent
+        apt: update_cache=yes name=qemu-guest-agent state=latest
+
+      - name: Manage qemu-guest-agent service
+        hosts: all
+        become: yes
+        tasks:
+          - name: Enable qemu-guest-agent service
+            systemd:
+              name: qemu-guest-agent
+              enabled: yes
+
+      - name: Start qemu-guest-agent service
+        systemd:
+          name: qemu-guest-agent
+          state: started
+
+      - name: Check status of qemu-guest-agent service
+        command: systemctl status qemu-guest-agent
+        register: qemu_guest_agent_status
+        ignore_errors: yes
+
+      - name: Display qemu-guest-agent service status
+        debug:
+          var: qemu_guest_agent_status.stdout
