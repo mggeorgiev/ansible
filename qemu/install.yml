@@ -7,7 +7,6 @@
 # Example Usage:
 # [user@host ~$] ansible-playbook ~/ansible/qemu/install.yml --inventory-file ~/inventory --extra-vars 'target=pi.habay' -K
 #
-  - name: Manage qemu-guest-agent service
   - hosts: '{{ target }}'
     become: true
 
